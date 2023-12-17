@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root xmlns:nsd="https://structorizer.fisch.lu" version="3.29-06" preRepeat="until " postFor="to" preReturn="return" postForIn="in" preWhile="while " output="OUTPUT" input="INPUT" preFor="for" preExit="exit" preLeave="leave" ignoreCase="true" preForIn="foreach" stepFor="by" author="Julia" created="2023-12-17" changedby="Julia" changed="2023-12-17" origin="Structorizer 3.29-06" text="&#34;void Jugar()&#34;" comment="" color="ffffff" type="program" style="nice">
+	<children>
+		<instruction text="&#34;int dados[5]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;int puntajeTotal &#60;- 0&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;int numeroDeTurno &#60;- 0&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;string nombreCategorias[] &#60;- {&#34;&#34;GENERALA DOBLE&#34;&#34;, &#34;&#34;1&#34;&#34;, &#34;&#34;2&#34;&#34;, &#34;&#34;3&#34;&#34;, &#34;&#34;4&#34;&#34;, &#34;&#34;5&#34;&#34;, &#34;&#34;6&#34;&#34;, &#34;&#34;GENERALA&#34;&#34;, &#34;&#34;POKER&#34;&#34;, &#34;&#34;FULL&#34;&#34;, &#34;&#34;ESCALERA&#34;&#34;}&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;int numeroCateDisponibles &#60;- nombreCategorias.lenght&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<instruction text="&#34;int categoriasDisponibles[numeroCateDisponibles]&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<for text="&#34;for i &#60;- 0 to numeroCateDisponibles&#34;" comment="" counterVar="i" startValue="0" endValue="numeroCateDisponibles" stepConst="1" style="COUNTER" color="ffffff" disabled="0">
+			<qFor>
+				<instruction text="&#34;categoriasDisponibles[i] &#60;- true&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+			</qFor>
+		</for>
+		<instruction text="&#34;boolean continuarJugando &#60;- true&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+		<while text="&#34;while (continuarJugando)&#34;" comment="" color="ffffff" disabled="0">
+			<qWhile>
+				<instruction text="&#34;int indicesDadosATirar[] &#60;- {0, 1, 2, 3, 4, 5}&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;dados &#60;- TirarDados(dados, indicesDadosATirar)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;MostrarDados(dados)&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;int dadosOrdenados[] &#60;- OrdenarDados(dados)&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+				<alternative text="&#34;(EsGeneralaServida(dadosOrdenados))&#34;" comment="" color="ffffff" disabled="0">
+					<qTrue>
+						<instruction text="&#34;return&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;indiceDadosATirar &#60;- VolverATirar(dados, indicesDadosATirar)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<alternative text="&#34;(indicesDadosATirar.length == 0)&#34;" comment="&#34;&#34;" color="ffffff" disabled="0">
+					<qTrue>
+						<instruction text="&#34;return&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<instruction text="&#34;dadosOrdenados &#60;- OrdenarDados(dados)&#34;" comment="&#34;&#34;" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;numeroDeTurno &#60;- numeroDeTurno + 1&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;int categoria &#60;- ObtenerCategoria(dadosOrdenados, categoriasDisponibles)&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;puntajeTotal &#60;- puntajeTotal + ObtenerPuntaje(categoria, dados, indiceDadosATirar)&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+				<instruction text="&#34;boolean quedanCategoriasDisponibiles &#60;- true&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+				<alternative text="&#34;(categoria &#60;&#62; 11)&#34;" comment="" color="ffffff" disabled="0">
+					<qTrue>
+						<instruction text="&#34;categoriasDisponibles[categoria] &#60;- false&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<alternative text="&#34;(numeroDeTurno &#62;= 0)&#34;" comment="" color="ffffff" disabled="0">
+					<qTrue>
+						<for text="&#34;for i &#60;- 1 to 10&#34;" comment="" counterVar="i" startValue="1" endValue="10" stepConst="1" style="COUNTER" color="ffffff" disabled="0">
+							<qFor>
+								<alternative text="&#34;(categoriasDisponibles[i])&#34;" comment="" color="ffffff" disabled="0">
+									<qTrue>
+										<instruction text="&#34;quedanCategoriasDisponibles &#60;- true&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+									</qTrue>
+									<qFalse>
+										<instruction text="&#34;quedanCategoriasDisponibles &#60;- false&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+									</qFalse>
+								</alternative>
+							</qFor>
+						</for>
+					</qTrue>
+					<qFalse color="ffffff">
+					</qFalse>
+				</alternative>
+				<alternative text="&#34;(quedanCategoriasDisponibles)&#34;" comment="" color="ffffff" disabled="0">
+					<qTrue>
+						<instruction text="&#34;OUTPUT &#34;&#34;Desea seguir Jugando&#34;&#34;&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;INPUT continuarJugandoInt&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+						<alternative text="&#34;(continuarJugandoInt == 2)&#34;" comment="" color="ffffff" disabled="0">
+							<qTrue>
+								<instruction text="&#34;OUTPUT &#34;&#34;Su puntaje total es &#34;&#34; + puntajeTotal + &#34;&#34; Fin del juego.&#34;&#34;&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+								<instruction text="&#34;continuarJugando &#60;- false&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+							</qTrue>
+							<qFalse color="ffffff">
+							</qFalse>
+						</alternative>
+					</qTrue>
+					<qFalse>
+						<instruction text="&#34;OUTPUT &#34;&#34;Ya no quedan categorias disponibles.&#34;&#34;&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;OUTPUT &#34;&#34;Su puntaje total es &#34;&#34; + puntajeTotal&#34;&#34; + &#34;&#34; Fin del juego.&#34;&#34;&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+						<instruction text="&#34;continuarJugando &#60;- false&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+					</qFalse>
+				</alternative>
+			</qWhile>
+		</while>
+		<instruction text="&#34;return&#34;" comment="" color="ffffff" rotated="0" disabled="0"></instruction>
+	</children>
+</root>

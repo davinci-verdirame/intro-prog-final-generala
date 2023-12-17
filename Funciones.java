@@ -1,6 +1,4 @@
-import java.awt.Component;
 import java.util.Scanner;
-
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -48,7 +46,7 @@ public class Funciones{
             "Tirando nuevos dados...",
             "La Generala",
             JOptionPane.INFORMATION_MESSAGE,
-            new ImageIcon(Generala.class.getResource("img/tirar-dados-img.jpeg"))
+            new ImageIcon(Generala.class.getResource("img/tirar-dados.png"))
         );
         for(int i = 0; i < dadosATirar.length; i++){
             dados[dadosATirar[i]] = (int)(Math.random()*6) + 1;
@@ -65,11 +63,14 @@ public class Funciones{
 
     //Se ordenan los dados de forma ascendente para facilitar la verificacion de categoria obtenida
     public static int[] OrdenarDados(int dados[]){
+        //Creamos una copia de los dados para mantener el array de dados sin ordenar (Se usa para mostrar al usuario)
         int[] dadosOrdenados = new int[dados.length];
         for(int i = 0; i < dados.length; i++){
             dadosOrdenados[i] = dados[i];
         }
         boolean huboCambio;
+
+        //Ordenamiento de dados
         for(int i = 0; i < dadosOrdenados.length; i++){
             int dadoAux;
             huboCambio = false;
