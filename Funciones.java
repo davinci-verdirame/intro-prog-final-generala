@@ -11,7 +11,7 @@ public class Funciones{
             null,
             "Instrucciones",
             JOptionPane.INFORMATION_MESSAGE,
-            new ImageIcon(Generala.class.getResource("img/Instrucciones-Generala.jpg"))
+            new ImageIcon(Generala.class.getResource("img/Instrucciones-Generala.png"))
         );
     }
 
