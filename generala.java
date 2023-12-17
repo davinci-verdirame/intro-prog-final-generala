@@ -6,11 +6,16 @@ class Generala {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-
+        System.out.println("\nLa Generala: \n");
+        JOptionPane.showMessageDialog(
+            null,
+            "Bienvenido al juego de La Generala!\n  El juego se desarrollara desde su consola.. Que se divierta!!",
+            "La Generala",
+            JOptionPane.INFORMATION_MESSAGE,
+            new ImageIcon(Generala.class.getResource("img/generala.png"))
+        );
         boolean continuar = true;
         while (continuar) {
-
-            System.out.println("\nLa Generala: ");
             System.out.println(
                 "1. Jugar\n" +
                 "2. Ver reglas del juego\n" + 
@@ -22,6 +27,7 @@ class Generala {
                     continuar = Jugar(sc);
                 break;
                 case 2:
+                System.out.println("\n --- Aviso: Es probable que necesite minimizar sus ventanas para poder ver la imagen con las reglas del juego ---\n");
                     Funciones.VerReglas();
                 break;
                 default:
@@ -37,14 +43,13 @@ class Generala {
 
     public static boolean Jugar(Scanner sc) {
         int[] dados = new int[5];
+        int puntajeTotal = 0;
+        int numeroDeTurno = 0;
 
         //Se utilizan para mostrar al usuario las categorias disponibles y para poder "deshabilitar" las que van saliendo.
         String[] nombreCategorias = {"GENERALA DOBLE", "1", "2", "3", "4", "5", "6", "GENERALA", "POKER", "FULL", "ESCALERA"};
         boolean[] categoriasDisponibles = new boolean[nombreCategorias.length];
 
-        int puntaje = 0;
-        int puntajeTotal = 0;
-        int numeroDeTurno = 0;
         String[] numbersToString = {"primer", "segundo", "tercer", "cuarto", "quinto"}; //Sólo se utiliza para poder mostrar un mensaje mas claro al usuario.
 
         //Se disponibilizan todas las categorias
@@ -65,124 +70,82 @@ class Generala {
 
             // Se valida si es Generala Servida, en ese caso gana la partida.
             int[] dadosOrdenados = Funciones.OrdenarDados(dados);
-            if (EsGenerala(dadosOrdenados)) {
-                System.out.println("\nFelicitaciones, has sacado una Generala Servida, la mejor categoria posible");
-                System.out.println("\"Que quieres hacer? \\n" +
-                        "1. Volver a jugar \\n" +
-                        "2. Volver al menú principal \\n" +
-                        "3. Salir\"");
-                int opcionElegida = Funciones.SolicitarNumero("Elija una opción: ", 3);
-                switch (opcionElegida) {
-                    case 1:
-                        Jugar(sc);
-                        break;
-                    case 2:
-                        return true;
-                    case 3:
-                        return false;
-                    default:
-                        System.out.println("Algo salio mal, estamos trabajando para solucionarlo..");
-                        return true;
-                }
+            if (EsGeneralaServida(dadosOrdenados)) {
+                return true;
             }
+
+            //Si al volver a tirar sale Generala Servida (Tirando los 5 dados de nuevo), gana la partida
+            if(VolverATirar(dados, dadosOrdenados, indicesDadosATirar, numbersToString)){
+                return true;
+            }
+            numeroDeTurno++;
+
+            //Se obtiene la categoria (El indice de la categoria)
+            int categoria = ObtenerCategoria(dadosOrdenados, categoriasDisponibles, nombreCategorias);
+
             
-            //Bucle para posibilitar al usuario volver a tirar los dados 1 o 2 veces mas.
-            int contador = 0;
-            boolean continuar = true;
-            while (continuar && contador < 2) {
-                int nroDadoElegido;
-                System.out.println("\n¿Desea tirar de nuevo los dados?");
-                int tirarDeNuevo = Funciones.SolicitarNumero("\n1. Si\n2. No\nElija una opcion (1-2): ", 2);
+            puntajeTotal += ObtenerPuntaje(categoria, dados, indicesDadosATirar);
+            boolean quedanCategoriasDisponibles = true;
+            
+            //Se deshabilita la categoria conseguida para que el usuario no pueda volver a escogerla en un proximo turno. 
+            //No se tiene en cuenta la 11 para esto porque no pertenece a ninguna Categoria
+            if(categoria != 11){
+                categoriasDisponibles[categoria] = false;
+            }
 
-                if (tirarDeNuevo == 1) {
-                    int cantDados = Funciones.SolicitarNumero("\n¿Cuantos dados desea volver a tirar? (1-5): ", 5);
-                    indicesDadosATirar = new int[cantDados]; // Se inicializa un array con tamaño acorde a la cantidad de dados a tirar
-
-                    // Si quiere tirar los 5 dados de nuevo, no se pregunta que dados quiere tirar
-                    if(cantDados != 5){
-                        int[] auxNroDadosElegidos = new int[cantDados]; // Variable auxiliar para validar que no se repitan numeros de dado
-                        for (int i = 0; i < cantDados; i++) {
-
-                            boolean dadoDisponible;
-                            // do-while para validar que no se repitan los nros de dados
-                            do {
-                                dadoDisponible = true;
-                                nroDadoElegido = Funciones.SolicitarNumero("\nIngrese el numero del " + numbersToString[i] + " dado que desea volver a tirar (1-5): ", 5);
-                                auxNroDadosElegidos[i] = nroDadoElegido; // Se guarda el numero elegido dentro del array para luego poder comparar
-
-                                if (i != 0) { // Si es la primer vuelta no se valida
-
-                                    for (int e = 0; e < i; e++) { // El nro de vueltas va a ser de la cantidad de dados que ya se hayan elegido - 1
-
-                                        if (nroDadoElegido == auxNroDadosElegidos[e]) {// Se valida que no se repita un mismo numero de dado ya elegido
-                                            dadoDisponible = false;
-                                            System.out.println("Ese numero de dado ya fue elegido, elija otro por favor..");
-                                            break;
-                                        }
-                                    }
-                                }
-                            } while (!dadoDisponible); // Mientras el dado no este disponible, se vuelve a pedir el numero de dado
-
-                            //El indice que indica que dado se vuelve a tirar siempre es uno menor al que elige el usuario (Por el comienzo del array en 0)
-                            indicesDadosATirar[i] = nroDadoElegido - 1;
-                        }
+            //A partir del tiro numero 10 se empieza a comprobar si quedan categorias disponibles
+            if(numeroDeTurno >= 0){
+                for (int i = 1; i <= 10; i++) {
+                    if (categoriasDisponibles[i]) {
+                        //Si al menos hay una disponible, el juego puede continuar (Si ignora la genera)
+                        quedanCategoriasDisponibles = true;
+                        break;
                     }
                     else{
-                        for(int i = 0; i < indicesDadosATirar.length; i++){
-                            indicesDadosATirar[i] = i;
-                        }
+                        quedanCategoriasDisponibles = false;
                     }
-
-                    dados = Funciones.TirarDados(dados, indicesDadosATirar);
-                    dados[0] = 2;
-                    dados[1] = 2;
-                    dados[2] = 2;
-                    dados[3] = 2;
-                    dados[4] = 2;
-                    Funciones.MostrarDados(dados);
-
-                    // Si tira los 5 dados, validar si es Generala. En ese caso no se pregunta si quiere volver a tirar y directamente gana la partida
-                    if (indicesDadosATirar.length == 5) {
-                        dadosOrdenados = Funciones.OrdenarDados(dados);
-                        if (EsGenerala(dadosOrdenados)) {
-                            System.out.println("\nFelicitaciones, has sacado una Generala Servida, la mejor categoria posible");
-                            System.out.println("Que quieres hacer? \n" +
-                                    "1. Volver a jugar \n" +
-                                    "2. Volver al menú principal \n" +
-                                    "3. Salir");
-                            int opcionElegida = Funciones.SolicitarNumero("Elija una opción: ", 3);
-                            switch (opcionElegida) {
-                                case 1:
-                                    Jugar(sc);
-                                    break;
-                                case 2:
-                                    return true;
-                                case 3:
-                                    return false;
-                                default:
-                                    System.out.println("Algo salio mal, estamos trabajando para solucionarlo..");
-                                    return true;
-                            }
-                        }
-                    }
-                    contador++;
-                } else {
-                    continuar = false;
                 }
             }
-            
-            //Se obtiene la categoria (El indice de la categoria)
-            int categoria = ObtenerCategoria(dados, categoriasDisponibles, nombreCategorias);
-            numeroDeTurno++;
+            if(quedanCategoriasDisponibles){
+                System.out.println("Desea seguir jugando?");
+                int continuarJugandoInt = Funciones.SolicitarNumero("1. Si \n2. No\nElija una opcion(1-2): ", 2);
+                if (continuarJugandoInt == 2) {
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "\nSu puntaje total es: " + puntajeTotal + "\nGracias por jugar!",
+                            "Fin del Juego",
+                            JOptionPane.INFORMATION_MESSAGE,
+                            new ImageIcon(Generala.class.getResource("img/generala.png")));
+                    System.out.println("\nSu puntaje total es " + puntajeTotal);
+                    System.out.println("\nFin del juego.\n\n");
+                    continuarJugando = false;
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(
+                            null,
+                            "\nYa no quedan categorias disponibles. \nSu puntaje total es: " + puntajeTotal + "\nGracias por jugar!",
+                            "Fin del Juego",
+                            JOptionPane.INFORMATION_MESSAGE,
+                            new ImageIcon(Generala.class.getResource("img/generala.png")));
+                System.out.println("\nYa no quedan categorias disponibles. \nSu puntaje total es: " + puntajeTotal);
+                System.out.println("\nFin del juego.\n\n");
+                continuarJugando = false;
+            }
+        }
+        return true;
+    }
+
+    public static int ObtenerPuntaje(int categoria, int[] dados, int[] indicesDadosATirar){
+        // puntajeTotal += ObtenerPuntaje(categoria, dados, indicesDadosATirar, )
             String mensaje = "";
+            int puntaje = 0;
 
             //Se usan solo para una mejor comunicacion con el usuario
             String[] servido_a = { " Servida", " Servido" };
             int indiceServido = 0;
 
             boolean esCategoriaMayor = true;
-            boolean quedanCategoriasDisponibles = true;
-            
             //Se asigna puntaje dependiendo de la categoria conseguida.
             switch (categoria) {
                 case 0: // GENERALA DOBLE
@@ -218,11 +181,6 @@ class Generala {
                     esCategoriaMayor = false;
                     break;
             }
-            //Se deshabilita la categoria conseguida para que el usuario no pueda volver a escogerla en un proximo turno. 
-            //No se tiene en cuenta la 11 para esto porque no pertenece a ninguna Categoria
-            if(categoria != 11){
-                categoriasDisponibles[categoria] = false;
-            }
 
             // Si es categoria mayor y se tiraron los 5 dados juntos es Categoria Mayor Servida
             if (esCategoriaMayor && indicesDadosATirar.length == 5) { 
@@ -231,40 +189,11 @@ class Generala {
             } else {
                 System.out.println("\n" + mensaje + "\nConsiguió " + puntaje + " puntos\n");
             }
-            puntajeTotal += puntaje;
-
-            //A partir del tiro numero 10 se empieza a comprobar si quedan categorias disponibles
-            if(numeroDeTurno >= 0){
-                for (int i = 1; i <= 10; i++) {
-                    if (categoriasDisponibles[i]) {
-                        //Si al menos hay una disponible, el juego puede continuar (Si ignora la genera)
-                        quedanCategoriasDisponibles = true;
-                        break;
-                    }
-                    else{
-                        quedanCategoriasDisponibles = false;
-                    }
-                }
-            }
-            if(quedanCategoriasDisponibles){
-                System.out.println("Desea seguir jugando?");
-                int continuarJugandoInt = Funciones.SolicitarNumero("1. Si \n2. No\nElija una opcion(1-2): ", 2);
-                if (continuarJugandoInt == 2) {
-                    continuarJugando = false;
-                }
-            }
-            else{
-                System.out.println("\nYa no quedan categorias disponibles. \nSu puntaje total es: " + puntajeTotal);
-                System.out.println("\nFin del juego.");
-                continuarJugando = false;
-            }
-        }
-        return true;
+        return puntaje;
     }
 
     //Se obtiene la mejor categoria mayor o las categorias de numeros disponible. Retorna un int correspondiente al indice de la categoria.
-    public static int ObtenerCategoria(int dados[], boolean[] categoriasDisponibles, String[] nombreCategorias){
-        int[] dadosOrdenados = Funciones.OrdenarDados(dados);
+    public static int ObtenerCategoria(int dadosOrdenados[], boolean[] categoriasDisponibles, String[] nombreCategorias){
         int categoriaElegida = 0;
 
         if(EsGenerala(dadosOrdenados)){
@@ -324,9 +253,83 @@ class Generala {
         return 11; //No pudo conseguir ninguna categoria de las disponibles.
     }
 
+    public static boolean VolverATirar(int[] dados, int[] dadosOrdenados, int[] indicesDadosATirar, String[] numbersToString){
+        //Bucle para posibilitar al usuario volver a tirar los dados 1 o 2 veces mas.
+            int contador = 0;
+            boolean continuar = true;
+            while (continuar && contador < 2) {
+                System.out.println("\n¿Desea tirar de nuevo los dados?");
+                int tirarDeNuevo = Funciones.SolicitarNumero("\n1. Si\n2. No\nElija una opcion (1-2): ", 2);
+
+                if (tirarDeNuevo == 1) {
+                    int cantDados = Funciones.SolicitarNumero("\n¿Cuantos dados desea volver a tirar? (1-5): ", 5);
+                    indicesDadosATirar = new int[cantDados]; // Se inicializa un array con tamaño acorde a la cantidad de dados a tirar
+
+                    // Si quiere tirar los 5 dados de nuevo, no se pregunta que dados quiere tirar
+                    if(cantDados != 5){
+                        int nroDadoElegido;
+                        int[] auxNroDadosElegidos = new int[cantDados]; // Variable auxiliar para validar que no se repitan numeros de dado
+                        for (int i = 0; i < cantDados; i++) {
+
+                            boolean dadoDisponible;
+                            // do-while para validar que no se repitan los nros de dados
+                            do {
+                                dadoDisponible = true;
+                                nroDadoElegido = Funciones.SolicitarNumero("\nIngrese el numero del " + numbersToString[i] + " dado que desea volver a tirar (1-5): ", 5);
+                                auxNroDadosElegidos[i] = nroDadoElegido; // Se guarda el numero elegido dentro del array para luego poder comparar
+
+                                if (i != 0) { // Si es la primer vuelta no se valida
+
+                                    for (int e = 0; e < i; e++) { // El nro de vueltas va a ser de la cantidad de dados que ya se hayan elegido - 1
+
+                                        if (nroDadoElegido == auxNroDadosElegidos[e]) {// Se valida que no se repita un mismo numero de dado ya elegido
+                                            dadoDisponible = false;
+                                            System.out.println("Ese numero de dado ya fue elegido, elija otro por favor..");
+                                            break;
+                                        }
+                                    }
+                                }
+                            } while (!dadoDisponible); // Mientras el dado no este disponible, se vuelve a pedir el numero de dado
+
+                            //El indice que indica que dado se vuelve a tirar siempre es uno menor al que elige el usuario (Por el comienzo del array en 0)
+                            indicesDadosATirar[i] = nroDadoElegido - 1;
+                        }
+                    }
+                    else{
+                        for(int i = 0; i < indicesDadosATirar.length; i++){
+                            indicesDadosATirar[i] = i;
+                        }
+                    }
+
+                    dados = Funciones.TirarDados(dados, indicesDadosATirar);
+                    Funciones.MostrarDados(dados);
+                    dadosOrdenados = Funciones.OrdenarDados(dados);
+
+                    // Si tira los 5 dados, validar si es Generala. En ese caso no se pregunta si quiere volver a tirar y directamente gana la partida
+                    if (indicesDadosATirar.length == 5) {
+                        if (EsGeneralaServida(dadosOrdenados)) {
+                            return true;
+                        }
+                    }
+                    contador++;
+                } else {
+                    continuar = false;
+            }
+        }
+        return false;
+    }
     
 
     // --- Importante tener en cuenta que los dados estan ordenados para comprender los proximos metodos ---
+
+    public static boolean EsGeneralaServida(int[] dados){
+        if (EsGenerala(dados)) {
+            System.out.println("\nFelicitaciones, has sacado una Generala Servida, la mejor categoria posible");
+            System.out.println("Que quieres hacer?");
+            return true;
+        }
+        return false;
+    }
 
     public static boolean EsGenerala(int dados[]) {
         if(dados[0] == dados[dados.length-1]){

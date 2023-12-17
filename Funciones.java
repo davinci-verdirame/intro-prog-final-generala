@@ -1,3 +1,4 @@
+import java.awt.Component;
 import java.util.Scanner;
 
 import javax.swing.ImageIcon;
@@ -42,6 +43,13 @@ public class Funciones{
     //Se generan aleatoriamente solo los dados que el usuario quiere
     //El parametro dadosATirar contiene los numero de indice de los dados a volver a tirar
     public static int[] TirarDados(int[] dados, int[] dadosATirar){
+        JOptionPane.showMessageDialog(
+            null,
+            "Tirando nuevos dados...",
+            "La Generala",
+            JOptionPane.INFORMATION_MESSAGE,
+            new ImageIcon(Generala.class.getResource("img/tirar-dados-img.jpeg"))
+        );
         for(int i = 0; i < dadosATirar.length; i++){
             dados[dadosATirar[i]] = (int)(Math.random()*6) + 1;
         }
