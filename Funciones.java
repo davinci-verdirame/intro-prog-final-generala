@@ -19,7 +19,7 @@ public class Funciones{
         Scanner sc = new Scanner(System.in);
         //El ciclo se va repetir hasta que el valor ingresado efectivamente sea un numero.
         while (true) {
-            System.out.print(textoSolicitud);
+            JOptionPane.showMessageDialog(null, textoSolicitud);
             if (sc.hasNextInt()) {
                 int numero = sc.nextInt();
                 if (limit > 0) {
@@ -27,13 +27,13 @@ public class Funciones{
                     if (numero > 0 && numero <= limit) {
                         return numero;
                     }
-                    System.out.println("Numero incorrecto.. Por favor ingresa un numero del 1 al " + limit + ": ");
+                    JOptionPane.showMessageDialog(null, "Numero incorrecto.. Por favor ingresa un numero del 1 al " + limit + ": ");
                 }
                 else{
                     return numero;
                 }
             } else {
-                System.out.println("No has ingresado una opcion correcta, vuelve a intentar");
+                JOptionPane.showMessageDialog(null, "No has ingresado una opcion correcta, vuelve a intentar");
                 sc.next(); //En caso que no sea un numero, consumo ese valor ingresado para liberar y volver a solicitar otro numero.
             }
         }
@@ -49,10 +49,12 @@ public class Funciones{
     }
 
     public static void MostrarDados(int[] dados){
-        System.out.println("\nSus dados son: ");
+        String mensaje = "";
         for(int i = 0; i<dados.length; i++){
-            System.out.print("Dado numero " + (i+1) + " -> " + dados[i] + "\n");
+            mensaje += "Dado numero " + (i + 1) + " -> " + dados[i] + "\n";
         }
+        JOptionPane.showMessageDialog(null, "\nSus dados son: \n" + mensaje + "\nTambién los tendra escritos en la consola para tenerlos en vista..");
+        System.out.println("Sus dados son: \n" + mensaje);
     }
 
     //Se ordenan los dados de forma ascendente para facilitar la verificacion de categoria obtenida

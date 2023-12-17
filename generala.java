@@ -10,18 +10,22 @@ class Generala {
         boolean continuar = true;
         while (continuar) {
 
-            System.out.println("\nLa Generala: ");
-            System.out.println(
-                "1. Jugar\n" +
-                "2. Ver reglas del juego\n" + 
-                "3. Salir");
-            int opcion = Funciones.SolicitarNumero( "\nElija una opcion: ", 3);
+            // int opcion = Integer.parseInt(
+            //     JOptionPane.showInputDialog(null, 
+            //     "1. Jugar\n" +
+            //     "2. Ver reglas del juego\n" + 
+            //     "3. Salir", 
+            //     "La Generala", JOptionPane.QUESTION_MESSAGE));
+
+            String[] opciones = {"Jugar", "Ver reglas del juego", "Salir"};
+
+            int opcion = JOptionPane.showOptionDialog(null, "Elija una opción", "La Generala", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
 
             switch (opcion) {
-                case 1:
+                case 0:
                     continuar = Jugar(sc);
                 break;
-                case 2:
+                case 1:
                     Funciones.VerReglas();
                 break;
                 default:
@@ -30,7 +34,7 @@ class Generala {
             }
         }
 
-        System.out.println("Saliendo...");
+        JOptionPane.showMessageDialog(null, "Saliendo...");
         sc.close();
     }
 
@@ -57,8 +61,8 @@ class Generala {
         while(continuarJugando){
             int[] indicesDadosATirar = {0,1,2,3,4};
             
-            System.out.print("\nCuando este listo para tirar los dados presione enter: ");
-            sc.nextLine();
+            JOptionPane.showMessageDialog(null, "\nCuando este listo para tirar los dados presione OK: ");
+            // sc.nextLine();
             
             dados = Funciones.TirarDados(dados, indicesDadosATirar);
             Funciones.MostrarDados(dados);
@@ -66,8 +70,8 @@ class Generala {
             // Se valida si es Generala Servida, en ese caso gana la partida.
             int[] dadosOrdenados = Funciones.OrdenarDados(dados);
             if (EsGenerala(dadosOrdenados)) {
-                System.out.println("\nFelicitaciones, has sacado una Generala Servida, la mejor categoria posible");
-                System.out.println("\"Que quieres hacer? \\n" +
+                JOptionPane.showMessageDialog(null, "\nFelicitaciones, has sacado una Generala Servida, la mejor categoria posible");
+                JOptionPane.showMessageDialog(null, "\"Que quieres hacer? \\n" +
                         "1. Volver a jugar \\n" +
                         "2. Volver al menú principal \\n" +
                         "3. Salir\"");
@@ -81,7 +85,7 @@ class Generala {
                     case 3:
                         return false;
                     default:
-                        System.out.println("Algo salio mal, estamos trabajando para solucionarlo..");
+                        JOptionPane.showMessageDialog(null, "Algo salio mal, estamos trabajando para solucionarlo..");
                         return true;
                 }
             }
@@ -91,7 +95,7 @@ class Generala {
             boolean continuar = true;
             while (continuar && contador < 2) {
                 int nroDadoElegido;
-                System.out.println("\n¿Desea tirar de nuevo los dados?");
+                JOptionPane.showMessageDialog(null, "\n¿Desea tirar de nuevo los dados?");
                 int tirarDeNuevo = Funciones.SolicitarNumero("\n1. Si\n2. No\nElija una opcion (1-2): ", 2);
 
                 if (tirarDeNuevo == 1) {
@@ -116,7 +120,7 @@ class Generala {
 
                                         if (nroDadoElegido == auxNroDadosElegidos[e]) {// Se valida que no se repita un mismo numero de dado ya elegido
                                             dadoDisponible = false;
-                                            System.out.println("Ese numero de dado ya fue elegido, elija otro por favor..");
+                                            JOptionPane.showMessageDialog(null, "Ese numero de dado ya fue elegido, elija otro por favor..");
                                             break;
                                         }
                                     }
@@ -145,8 +149,8 @@ class Generala {
                     if (indicesDadosATirar.length == 5) {
                         dadosOrdenados = Funciones.OrdenarDados(dados);
                         if (EsGenerala(dadosOrdenados)) {
-                            System.out.println("\nFelicitaciones, has sacado una Generala Servida, la mejor categoria posible");
-                            System.out.println("Que quieres hacer? \n" +
+                            JOptionPane.showMessageDialog(null, "\nFelicitaciones, has sacado una Generala Servida, la mejor categoria posible");
+                            JOptionPane.showMessageDialog(null, "Que quieres hacer? \n" +
                                     "1. Volver a jugar \n" +
                                     "2. Volver al menú principal \n" +
                                     "3. Salir");
@@ -160,7 +164,7 @@ class Generala {
                                 case 3:
                                     return false;
                                 default:
-                                    System.out.println("Algo salio mal, estamos trabajando para solucionarlo..");
+                                    JOptionPane.showMessageDialog(null, "Algo salio mal, estamos trabajando para solucionarlo..");
                                     return true;
                             }
                         }
@@ -227,9 +231,9 @@ class Generala {
             // Si es categoria mayor y se tiraron los 5 dados juntos es Categoria Mayor Servida
             if (esCategoriaMayor && indicesDadosATirar.length == 5) { 
                 puntaje += 5;
-                System.out.println("\n" + mensaje + servido_a[indiceServido] + "!!\nConsiguió " + puntaje + " puntos");
+                JOptionPane.showMessageDialog(null, "\n" + mensaje + servido_a[indiceServido] + "!!\nConsiguió " + puntaje + " puntos");
             } else {
-                System.out.println("\n" + mensaje + "\nConsiguió " + puntaje + " puntos\n");
+                JOptionPane.showMessageDialog(null, "\n" + mensaje + "\nConsiguió " + puntaje + " puntos\n");
             }
             puntajeTotal += puntaje;
 
@@ -247,15 +251,15 @@ class Generala {
                 }
             }
             if(quedanCategoriasDisponibles){
-                System.out.println("Desea seguir jugando?");
+                JOptionPane.showMessageDialog(null, "Desea seguir jugando?");
                 int continuarJugandoInt = Funciones.SolicitarNumero("1. Si \n2. No\nElija una opcion(1-2): ", 2);
                 if (continuarJugandoInt == 2) {
                     continuarJugando = false;
                 }
             }
             else{
-                System.out.println("\nYa no quedan categorias disponibles. \nSu puntaje total es: " + puntajeTotal);
-                System.out.println("\nFin del juego.");
+                JOptionPane.showMessageDialog(null, "\nYa no quedan categorias disponibles. \nSu puntaje total es: " + puntajeTotal);
+                JOptionPane.showMessageDialog(null, "\nFin del juego.");
                 continuarJugando = false;
             }
         }
@@ -291,7 +295,7 @@ class Generala {
             }
         }
         
-        System.out.println("\nNo consiguio ninguna categoria mayor disponible");
+        JOptionPane.showMessageDialog(null, "\nNo consiguio ninguna categoria mayor disponible");
         
         //Comprobacion de Categorias de numeros disponibles
         boolean hayNumeroDisponible = false;
@@ -303,10 +307,10 @@ class Generala {
         if(hayNumeroDisponible){
             boolean eleccionDisponible = false;
             do {
-                System.out.println("Estas son las categorias de numero disponibles: ");
+                JOptionPane.showMessageDialog(null, "Estas son las categorias de numero disponibles: ");
                 for (int i = 1; i <= 6; i++) {
                     if (categoriasDisponibles[i]) {
-                        System.out.println("- " + nombreCategorias[i]);
+                        JOptionPane.showMessageDialog(null, "- " + nombreCategorias[i]);
                     }
                 }
                 //Se pregunta a que numero desea cargar los puntos
@@ -314,7 +318,7 @@ class Generala {
                 if (categoriasDisponibles[categoriaElegida]) {
                     eleccionDisponible = true;
                 } else {
-                    System.out.println("\nNumero de categoria no disponible.. \n");
+                    JOptionPane.showMessageDialog(null, "\nNumero de categoria no disponible.. \n");
                 }
             } while (!eleccionDisponible);
 
