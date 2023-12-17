@@ -60,8 +60,8 @@ class Generala {
             System.out.print("\nCuando este listo para tirar los dados presione enter: ");
             sc.nextLine();
             
-            dados = TirarDados(dados, indicesDadosATirar);
-            MostrarDados(dados);
+            dados = Funciones.TirarDados(dados, indicesDadosATirar);
+            Funciones.MostrarDados(dados);
 
             // Se valida si es Generala Servida, en ese caso gana la partida.
             int[] dadosOrdenados = Funciones.OrdenarDados(dados);
@@ -133,13 +133,13 @@ class Generala {
                         }
                     }
 
-                    dados = TirarDados(dados, indicesDadosATirar);
+                    dados = Funciones.TirarDados(dados, indicesDadosATirar);
                     dados[0] = 2;
                     dados[1] = 2;
                     dados[2] = 2;
                     dados[3] = 2;
                     dados[4] = 2;
-                    MostrarDados(dados);
+                    Funciones.MostrarDados(dados);
 
                     // Si tira los 5 dados, validar si es Generala. En ese caso no se pregunta si quiere volver a tirar y directamente gana la partida
                     if (indicesDadosATirar.length == 5) {
@@ -260,22 +260,6 @@ class Generala {
             }
         }
         return true;
-    }
-
-    //Se generan aleatoriamente solo los dados que el usuario quiere
-    //El parametro dadosATirar contiene los numero de indice de los dados a volver a tirar
-    public static int[] TirarDados(int[] dados, int[] dadosATirar){
-        for(int i = 0; i < dadosATirar.length; i++){
-            dados[dadosATirar[i]] = (int)(Math.random()*6) + 1;
-        }
-        return dados;
-    }
-
-    public static void MostrarDados(int[] dados){
-        System.out.println("\nSus dados son: ");
-        for(int i = 0; i<dados.length; i++){
-            System.out.print("Dado numero " + (i+1) + " -> " + dados[i] + "\n");
-        }
     }
 
     //Se obtiene la mejor categoria mayor o las categorias de numeros disponible. Retorna un int correspondiente al indice de la categoria.

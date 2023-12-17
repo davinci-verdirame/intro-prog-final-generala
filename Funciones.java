@@ -15,20 +15,6 @@ public class Funciones{
         );
     }
 
-    // public static int SolicitarNumero(String textoSolicitud) {
-    //     Scanner sc = new Scanner(System.in);
-    //     //El ciclo se va repetir hasta que el valor ingresado efectivamente sea un numero.
-    //     while (true) {
-    //         System.out.print(textoSolicitud);
-    //         if (sc.hasNextInt()) {
-    //             return sc.nextInt();
-    //         } else {
-    //             System.out.println("No has ingresado una opcion correcta, vuelve a intentar");
-    //             sc.next(); //En caso que no sea un numero, consumo ese valor ingresado para liberar y volver a solicitar otro numero.
-    //         }
-    //     }
-    // }
-
     public static int SolicitarNumero(String textoSolicitud, int limit) {
         Scanner sc = new Scanner(System.in);
         //El ciclo se va repetir hasta que el valor ingresado efectivamente sea un numero.
@@ -50,6 +36,22 @@ public class Funciones{
                 System.out.println("No has ingresado una opcion correcta, vuelve a intentar");
                 sc.next(); //En caso que no sea un numero, consumo ese valor ingresado para liberar y volver a solicitar otro numero.
             }
+        }
+    }
+
+    //Se generan aleatoriamente solo los dados que el usuario quiere
+    //El parametro dadosATirar contiene los numero de indice de los dados a volver a tirar
+    public static int[] TirarDados(int[] dados, int[] dadosATirar){
+        for(int i = 0; i < dadosATirar.length; i++){
+            dados[dadosATirar[i]] = (int)(Math.random()*6) + 1;
+        }
+        return dados;
+    }
+
+    public static void MostrarDados(int[] dados){
+        System.out.println("\nSus dados son: ");
+        for(int i = 0; i<dados.length; i++){
+            System.out.print("Dado numero " + (i+1) + " -> " + dados[i] + "\n");
         }
     }
 
