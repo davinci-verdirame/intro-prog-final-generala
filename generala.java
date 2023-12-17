@@ -117,24 +117,24 @@ class Generala {
                 if (continuarJugandoInt == 2) {
                     JOptionPane.showMessageDialog(
                             null,
-                            "\nSu puntaje total es: " + puntajeTotal + "\nGracias por jugar!",
+                            "Su puntaje total es: " + puntajeTotal + "\nGracias por jugar!",
                             "Fin del Juego",
                             JOptionPane.INFORMATION_MESSAGE,
                             new ImageIcon(Generala.class.getResource("img/generala.png")));
                     System.out.println("\nSu puntaje total es " + puntajeTotal);
-                    System.out.println("\nFin del juego.\n\n");
+                    System.out.println("\nGracias por jugar!\n\n");
                     continuarJugando = false;
                 }
             }
             else{
                 JOptionPane.showMessageDialog(
                             null,
-                            "\nYa no quedan categorias disponibles. \nSu puntaje total es: " + puntajeTotal + "\nGracias por jugar!",
+                            "Ya no quedan categorias disponibles. \nSu puntaje total es: " + puntajeTotal + "\nGracias por jugar!",
                             "Fin del Juego",
                             JOptionPane.INFORMATION_MESSAGE,
                             new ImageIcon(Generala.class.getResource("img/generala.png")));
                 System.out.println("\nYa no quedan categorias disponibles. \nSu puntaje total es: " + puntajeTotal);
-                System.out.println("\nFin del juego.\n\n");
+                System.out.println("\nGracias por jugar!\n\n");
                 continuarJugando = false;
             }
         }

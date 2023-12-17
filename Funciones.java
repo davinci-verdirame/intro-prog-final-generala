@@ -46,7 +46,7 @@ public class Funciones{
             "Tirando nuevos dados...",
             "La Generala",
             JOptionPane.INFORMATION_MESSAGE,
-            new ImageIcon(Generala.class.getResource("img/tirar-dados-img.jpeg"))
+            new ImageIcon(Generala.class.getResource("img/tirar-dados.png"))
         );
         for(int i = 0; i < dadosATirar.length; i++){
             dados[dadosATirar[i]] = (int)(Math.random()*6) + 1;
