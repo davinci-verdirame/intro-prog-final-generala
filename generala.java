@@ -9,7 +9,7 @@ class Generala {
         System.out.println("\nLa Generala: \n");
         JOptionPane.showMessageDialog(
             null,
-            "Bienvenido al juego de La Generala!\n  El juego se desarrollara desde su consola.. Que se divierta!!",
+            "Bienvenido al juego de La Generala!\n El juego se desarrollara desde su consola.. Que se divierta!!",
             "La Generala",
             JOptionPane.INFORMATION_MESSAGE,
             new ImageIcon(Generala.class.getResource("img/generala.png"))
@@ -74,10 +74,15 @@ class Generala {
                 return;
             }
 
-            //Si al volver a tirar sale Generala Servida (Tirando los 5 dados de nuevo), gana la partida
-            if(VolverATirar(dados, dadosOrdenados, indicesDadosATirar, numbersToString)){
+            //Se retorna el valor de indicesDadosATirar para despues comprobar si fue una categoria servida (indicesDadosATirar == 5) en el metodo ObtenerPuntaje.
+            indicesDadosATirar = VolverATirar(dados, indicesDadosATirar, numbersToString);
+
+            //Si al volver a tirar sale Generala Servida, gana la partida
+            //En caso de ser Generala Servida el indiceDadosATirar se retorna en 0 para terminar la partida
+            if(indicesDadosATirar.length == 0){
                 return;
             }
+            dadosOrdenados = Funciones.OrdenarDados(dados);
             numeroDeTurno++;
 
             //Se obtiene la categoria (El indice de la categoria)
@@ -253,8 +258,7 @@ class Generala {
         return 11; //No pudo conseguir ninguna categoria de las disponibles.
     }
 
-    public static boolean VolverATirar(int[] dados, int[] dadosOrdenados, int[] indicesDadosATirar,
-        String[] numbersToString) {
+    public static int[] VolverATirar(int[] dados, int[] indicesDadosATirar, String[] numbersToString) {
         // Bucle para posibilitar al usuario volver a tirar los dados 1 o 2 veces mas.
         int contador = 0;
         boolean continuar = true;
@@ -263,6 +267,7 @@ class Generala {
             int tirarDeNuevo = Funciones.SolicitarNumero("\n1. Si\n2. No\nElija una opcion (1-2): ", 2);
 
             if (tirarDeNuevo == 1) {
+                //Primero se le pregunta cuantos dados desea volver a tirar para luego con un for pedirle que indique los numeros de dados.
                 int cantDados = Funciones.SolicitarNumero("\n¿Cuantos dados desea volver a tirar? (1-5): ", 5);
                 indicesDadosATirar = new int[cantDados]; // Se inicializa un array con tamaño acorde a la cantidad de dados a tirar
 
@@ -305,13 +310,14 @@ class Generala {
 
                 dados = Funciones.TirarDados(dados, indicesDadosATirar);
                 Funciones.MostrarDados(dados);
-                dadosOrdenados = Funciones.OrdenarDados(dados);
 
                 // Si tira los 5 dados, validar si es Generala. En ese caso no se pregunta si
                 // quiere volver a tirar y directamente gana la partida
                 if (indicesDadosATirar.length == 5) {
+                    int[] dadosOrdenados = Funciones.OrdenarDados(dados);
                     if (EsGeneralaServida(dadosOrdenados)) {
-                        return true;
+                        int[] servida = new int[0];
+                        return servida;
                     }
                 }
                 contador++;
@@ -319,7 +325,7 @@ class Generala {
                 continuar = false;
             }
         }
-        return false;
+        return indicesDadosATirar;
     }
     
 
